@@ -205,7 +205,7 @@ namespace Oxide.Plugins
                 _data.cooldown.Remove(player.UserIDString);
             }
 
-            
+            ////
             if (!_data.playerMini.ContainsKey(player.UserIDString)) { // If player doesn't have heli
                 SpawnMinicopter(player); //Spawn one
                 return; //Done
@@ -222,7 +222,7 @@ namespace Oxide.Plugins
                 BaseNetworkable.serverEntities.Find(_data.playerMini[player.UserIDString])?.Kill();//Remove it               
                 SpawnMinicopter(player); //Spawn New
             }
-
+            ////
 
         }
 
