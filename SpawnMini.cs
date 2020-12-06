@@ -187,8 +187,8 @@ namespace Oxide.Plugins
                 }
                 else
                 {
-                    player.ChatMessage(lang.GetMessage("mini_current", this, player.UserIDString));
-                    return;
+                    //player.ChatMessage(lang.GetMessage("mini_current", this, player.UserIDString));
+                    //return;
                 }
             }
             
@@ -205,12 +205,17 @@ namespace Oxide.Plugins
                 _data.cooldown.Remove(player.UserIDString);
             }
 
-            ////
+
             if (!_data.playerMini.ContainsKey(player.UserIDString)) { // If player doesn't have heli
                 SpawnMinicopter(player); //Spawn one
                 return; //Done
-            }              
+            }
             else { //Player has a heli already
+                MiniCopter mini = BaseNetworkable.serverEntities.Find(_data.playerMini[player.UserIDString]) as MiniCopter;
+                if (mini == null) {
+                    return;
+                }
+
                 if (mini.AnyMounted() && (!_config.canDespawnWhileOccupied || player.GetMountedVehicle() == mini)) {//Make Sure it's not mounted
                     player.ChatMessage(lang.GetMessage("mini_mounted", this, player.UserIDString));//Message if it is
                     return;//Done
@@ -219,10 +224,11 @@ namespace Oxide.Plugins
                     player.ChatMessage(lang.GetMessage("mini_current_distance", this, player.UserIDString));//Msg if not
                     return;//Done
                 }
-                BaseNetworkable.serverEntities.Find(_data.playerMini[player.UserIDString])?.Kill();//Remove it               
-                SpawnMinicopter(player); //Spawn New
+                mini.transform.SetPositionAndRotation(GetIdealFixedPositionForPlayer(player), GetIdealRotationForPlayer(player));
+                //BaseNetworkable.serverEntities.Find(_data.playerMini[player.UserIDString])?.Kill();//Remove it               
+                //SpawnMinicopter(player); //Spawn New
             }
-            ////
+
 
         }
 
